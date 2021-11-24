@@ -32,7 +32,7 @@ func GetBook(c *fiber.Ctx) error {
 func AddBook(c *fiber.Ctx) error {
 	book := new(Book)
 	if err := c.BodyParser(book); err != nil {
-		c.Status(503).SendString(err.Error())
+		return c.Status(503).SendString(err.Error())
 	}
 
 	database.DB.Create(&book)
