@@ -21,11 +21,24 @@ func GetAllBooks(c *fiber.Ctx) error {
 }
 
 func GetBook(c *fiber.Ctx) error {
-	return c.SendString("single Book")
+	id := c.Params("id")
+	var book Book
+
+	database.DB.Find(&book, id)
+
+	return c.JSON(book)
 }
 
 func AddBook(c *fiber.Ctx) error {
-	return c.SendString("Add new book")
+	book := Book{
+		Title:  "The Brothers Karamazov",
+		Author: "Fyodor Dostoyevsky",
+		Rating: 5,
+	}
+
+	database.DB.Create(&book)
+
+	return c.JSON(book)
 }
 
 func UpdateBook(c *fiber.Ctx) error {

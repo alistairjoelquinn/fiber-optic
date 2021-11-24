@@ -33,7 +33,7 @@ func routeErrorHandler(c *fiber.Ctx, err error) error {
 func openDB() *gorm.DB {
 	var err error
 
-	dsn := "postgres://postgres:postgres@localhost:5432/go_movies?sslmode=disable"
+	dsn := "postgres://postgres:postgres@localhost:5432/books?sslmode=disable"
 	database.DB, err = gorm.Open(postgres.Open(dsn))
 
 	if err != nil {
