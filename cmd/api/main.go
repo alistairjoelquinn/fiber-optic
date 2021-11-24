@@ -3,8 +3,8 @@ package main
 import (
 	"log"
 
-	"github.com/alistairjoelquinn/fiber-optic/cmd/books"
 	"github.com/alistairjoelquinn/fiber-optic/cmd/database"
+	books "github.com/alistairjoelquinn/fiber-optic/cmd/handlers"
 	"github.com/gofiber/fiber/v2"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -16,7 +16,9 @@ func main() {
 	})
 	openDB()
 
-	app.Get("/", rootRouteResponse)
+	app.Get("/", func(c *fiber.Ctx) error {
+		return c.SendString("home page")
+	})
 	app.Get("/v1/books", books.GetAllBooks)
 	app.Get("/v1/book/:id", books.GetBook)
 	app.Post("/v1/book/", books.AddBook)
