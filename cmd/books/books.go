@@ -30,10 +30,9 @@ func GetBook(c *fiber.Ctx) error {
 }
 
 func AddBook(c *fiber.Ctx) error {
-	book := Book{
-		Title:  "The Brothers Karamazov",
-		Author: "Fyodor Dostoyevsky",
-		Rating: 5,
+	book := new(Book)
+	if err := c.BodyParser(book); err != nil {
+		c.Status(503).SendString(err.Error())
 	}
 
 	database.DB.Create(&book)
@@ -46,5 +45,15 @@ func UpdateBook(c *fiber.Ctx) error {
 }
 
 func DeleteBook(c *fiber.Ctx) error {
-	return c.SendString("All Books!")
+	id := c.Params("id")
+
+	var book Book
+	dbResponse := database.DB.First(&book, id)
+	if dbResponse.Error != nil {
+		return c.Status(500).SendString("No book matches this ID")
+	}
+
+	database.DB.Delete(&book)
+
+	return c.Status(200).SendString("book deleted")
 }
